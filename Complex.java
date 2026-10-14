@@ -19,6 +19,10 @@ public final class Complex {
         return imaginary;
     }
 
+    public boolean isZero() {
+        return real == 0.0 && imaginary == 0.0;
+    }
+
     public Complex add(Complex b) {
         return new Complex(this.real + b.real(), this.imaginary + b.imaginary());
     }
