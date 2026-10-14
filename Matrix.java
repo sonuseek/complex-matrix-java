@@ -25,6 +25,10 @@ public class Matrix {
         data[i][j] = value;
     }
 
+    public boolean isSquare() {
+        return rows == cols;
+    }
+
 
     public Matrix add(Matrix b) {
         if(this.rows != b.rows || this.cols != b.cols){
@@ -80,6 +84,10 @@ public class Matrix {
         return res;
     }
 
+    public Matrix div(Matrix b) {
+        return this.mul(b.inverse());
+    }
+
 
     public Matrix transpose() {
         Matrix res = new Matrix(cols, rows);
@@ -128,7 +136,7 @@ public class Matrix {
                 sign = -sign;
             }
             
-            det = det.mul(temp[col][col]); 
+            det = det.mul(temp[col][col]);
 
             for (int r = col + 1; r < rows; r++) {
                 Complex factor = temp[r][col].div(temp[col][col]);
@@ -144,6 +152,73 @@ public class Matrix {
         return det;
 
     }
+
+
+    public Matrix inverse() {
+        if (!isSquare()) {
+            throw new IllegalArgumentException("Размер матрицы не подходит для нахождения обратной матрицы");
+        }
+
+        Complex[][] temp = new Complex[rows][2 * rows];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                temp[i][j] = data[i][j];
+                temp[i][rows + j] = (i == j) ? Complex.ONE : Complex.ZERO;
+            }
+        }
+
+        for (int col = 0; col < rows; col++) {
+            int pivot = -1;
+            for (int k = col; k < rows; k++) {
+                if (!temp[k][col].isZero()) {
+                    pivot = k;
+                    break;
+                }
+            }
+
+            if (pivot == -1) {
+                throw new ArithmeticException("Матрица вырождена, обратной не существует");
+            }
+        
+            if (pivot != col) {
+                Complex[] tmp = temp[pivot];
+                temp[pivot] = temp[col];
+                temp[col] = tmp;
+            }
+
+            Complex pivotValue = temp[col][col];
+            for (int c = 0; c < 2 * rows; c++) {
+                temp[col][c] = temp[col][c].div(pivotValue);
+            }
+
+            for (int r = 0; r < rows; r++) {
+                if (r == col) continue;
+
+                Complex factor = temp[r][col];
+
+                if (factor.isZero()) continue;
+
+                for (int c = 0; c < 2 * rows; c++) {
+                    temp[r][c] = temp[r][c].sub(factor.mul(temp[col][c]));
+                }
+            }
+        }
+
+        Matrix result = new Matrix(rows, rows);
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                result.set(i, j, temp[i][rows + j]);
+            }
+        }
+        return result;
+    }
+
+
+
+
+
 
     @Override
     public String toString() {
