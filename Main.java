@@ -7,13 +7,13 @@ public class Main {
 
         System.out.println("=== Матрицы комплексных чисел ===");
 
+        System.out.println("Введите матрицу A:");
+        Matrix a = readMatrix(sc, "A");
+
+        System.out.println("Введите матрицу B:");
+        Matrix b = readMatrix(sc, "B");
+
         while (true) {
-            System.out.println("\nВведите матрицу A:");
-            Matrix a = readMatrix(sc, "A");
-
-            System.out.println("Введите матрицу B:");
-            Matrix b = readMatrix(sc, "B");
-
             System.out.println("\nМатрица A:");
             System.out.print(a);
             System.out.println("Матрица B:");
@@ -28,6 +28,8 @@ public class Main {
             System.out.println("6 - определитель A");
             System.out.println("7 - определитель B");
             System.out.println("8 - обратная к A");
+            System.out.println("9 - ввести A заново");
+            System.out.println("10 - ввести B заново");
             System.out.println("0 - выход");
             System.out.print("Ваш выбор: ");
 
@@ -38,40 +40,71 @@ public class Main {
                 return;
             }
 
+            if (choice == 9) {
+                a = readMatrix(sc, "A");
+                continue;
+            }
+
+            if (choice == 10) {
+                b = readMatrix(sc, "B");
+                continue;
+            }
+
             try {
-                switch (choice) {
-                    case 1:
-                        System.out.println("A + B =");
-                        System.out.println(a.add(b));
-                        break;
-                    case 2:
-                        System.out.println("A - B =");
-                        System.out.println(a.sub(b));
-                        break;
-                    case 3:
-                        System.out.println("A * B =");
-                        System.out.println(a.mul(b));
-                        break;
-                    case 4:
-                        System.out.println("A / B =");
-                        System.out.println(a.div(b));
-                        break;
-                    case 5:
-                        System.out.println("A транспонированная =");
-                        System.out.println(a.transpose());
-                        break;
-                    case 6:
-                        System.out.println("det(A) = " + a.determinant());
-                        break;
-                    case 7:
-                        System.out.println("det(B) = " + b.determinant());
-                        break;
-                    case 8:
-                        System.out.println("A в степени -1 =");
-                        System.out.println(a.inverse());
-                        break;
-                    default:
-                        System.out.println("Нет такой операции");
+                if (choice == 1) {
+                    Matrix res = a.add(b);
+                    System.out.println("A + B =");
+                    System.out.println(res);
+                    System.out.println("Сохранить? 1-никуда, 2-в A, 3-в B");
+                    int s = sc.nextInt();
+                    if (s == 2) a = res;
+                    if (s == 3) b = res;
+                } else if (choice == 2) {
+                    Matrix res = a.sub(b);
+                    System.out.println("A - B =");
+                    System.out.println(res);
+                    System.out.println("Сохранить? 1-никуда, 2-в A, 3-в B");
+                    int s = sc.nextInt();
+                    if (s == 2) a = res;
+                    if (s == 3) b = res;
+                } else if (choice == 3) {
+                    Matrix res = a.mul(b);
+                    System.out.println("A * B =");
+                    System.out.println(res);
+                    System.out.println("Сохранить? 1-никуда, 2-в A, 3-в B");
+                    int s = sc.nextInt();
+                    if (s == 2) a = res;
+                    if (s == 3) b = res;
+                } else if (choice == 4) {
+                    Matrix res = a.div(b);
+                    System.out.println("A / B =");
+                    System.out.println(res);
+                    System.out.println("Сохранить? 1-никуда, 2-в A, 3-в B");
+                    int s = sc.nextInt();
+                    if (s == 2) a = res;
+                    if (s == 3) b = res;
+                } else if (choice == 5) {
+                    Matrix res = a.transpose();
+                    System.out.println("A транспонированная =");
+                    System.out.println(res);
+                    System.out.println("Сохранить? 1-никуда, 2-в A, 3-в B");
+                    int s = sc.nextInt();
+                    if (s == 2) a = res;
+                    if (s == 3) b = res;
+                } else if (choice == 6) {
+                    System.out.println("det(A) = " + a.determinant());
+                } else if (choice == 7) {
+                    System.out.println("det(B) = " + b.determinant());
+                } else if (choice == 8) {
+                    Matrix res = a.inverse();
+                    System.out.println("A в степени -1 =");
+                    System.out.println(res);
+                    System.out.println("Сохранить? 1-никуда, 2-в A, 3-в B");
+                    int s = sc.nextInt();
+                    if (s == 2) a = res;
+                    if (s == 3) b = res;
+                } else {
+                    System.out.println("Нет такой операции");
                 }
             } catch (Exception e) {
                 System.out.println("Ошибка: " + e.getMessage());
