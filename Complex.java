@@ -3,6 +3,9 @@ public final class Complex {
     private final double real;
     private final double imaginary;
 
+    public static final Complex ZERO = new Complex(0, 0);
+    public static final Complex ONE = new Complex(1, 0);
+
     public Complex(double real, double imaginary) {
         this.real = real;
         this.imaginary = imaginary;
@@ -34,6 +37,7 @@ public final class Complex {
                             (this.imaginary * b.real() - this.real * b.imaginary())/(b.real() * b.real() + b.imaginary() * b.imaginary()));
     }
 
+    @Override
     public String toString() {
         return real + " + " + imaginary + "i";
     }
