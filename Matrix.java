@@ -15,13 +15,16 @@ public class Matrix {
         }
     }
 
+
     public Complex get(int i, int j) {
         return data[i][j];
     }
 
+
     public void set(int i, int j, Complex value) {
         data[i][j] = value;
     }
+
 
     public Matrix add(Matrix b) {
         if(this.rows != b.rows || this.cols != b.cols){
@@ -37,6 +40,7 @@ public class Matrix {
         }
         return res;
     }
+
 
     public Matrix sub(Matrix b) {
         if(this.rows != b.rows || this.cols != b.cols){
@@ -76,6 +80,7 @@ public class Matrix {
         return res;
     }
 
+
     public Matrix transpose() {
         Matrix res = new Matrix(cols, rows);
         for(int i = 0; i < rows; i++) {
@@ -84,6 +89,60 @@ public class Matrix {
             }
         }
         return res;
+    }
+
+    public Complex determinant(){
+        if (this.rows != this.cols) {
+            throw new IllegalArgumentException("Размер матрицы не подходит для нахождения определителя");
+        }
+
+        Complex[][] temp = new Complex[rows][];
+
+        for (int i = 0; i < rows; i++) {
+            temp[i] = new Complex[rows];
+            for (int j = 0; j < rows; j++) {
+                temp[i][j] = data[i][j];
+            }
+        }
+
+        Complex det = Complex.ONE;
+        int sign = 1;
+        
+        for (int col = 0; col < rows; col++) {
+            int pivot = -1;
+            for (int k = col; k < rows; k++) {
+                if (!temp[k][col].isZero()) {
+                    pivot = k;
+                    break;
+                }
+            }
+
+            if (pivot == -1) {
+                return Complex.ZERO;
+            }
+
+            if (pivot != col) {
+                Complex[] tmp = temp[pivot];
+                temp[pivot] = temp[col];
+                temp[col] = tmp;
+                sign = -sign;
+            }
+            
+            det = det.mul(temp[col][col]); 
+
+            for (int r = col + 1; r < rows; r++) {
+                Complex factor = temp[r][col].div(temp[col][col]);
+                for (int c = col; c < rows; c++) {  
+                    temp[r][c] = temp[r][c].sub(factor.mul(temp[col][c]));
+                }
+            }
+        }
+
+        if (sign == -1) {
+            det = new Complex(-det.real(), -det.imaginary());
+        }
+        return det;
+
     }
 
     @Override
